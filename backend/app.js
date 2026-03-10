@@ -59,6 +59,11 @@ app.use(
 );
 
 //react / frontend fallback
+app.get("/health", (req, res) => {
+  res.status(200).send("KaveriLearn API is running 🚀");
+});
+
+// React fallback
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/public/index.html"));
 });

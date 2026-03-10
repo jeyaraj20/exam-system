@@ -1,0 +1,85 @@
+.test-page {
+  background: #f0f2f5;
+  min-height: 100vh;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.test-card {
+  background: white;
+  width: 100%;
+  max-width: 800px;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-title {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-group input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.check-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin: 10px 0 25px;
+}
+
+.check-tile {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: #fafafa;
+}
+
+.check-tile input {
+  margin-right: 10px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 15px;
+  background: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #40a9ff;
+}

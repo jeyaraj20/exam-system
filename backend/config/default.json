@@ -1,0 +1,12 @@
+{
+  "mongodb": {
+    "connectionString": "mongodb+srv://exam:LdjdhjHUh8h@cluster0.38j9gsf.mongodb.net/exam_portal?retryWrites=true&w=majority&appName=Cluster0"
+  },
+  "jwt": {
+    "secret": "Examination Portal Application"
+  },
+  "mail-credentials": {
+    "userid": "<smtp server userId>",
+    "password": "<smtp server password>"
+  }
+}

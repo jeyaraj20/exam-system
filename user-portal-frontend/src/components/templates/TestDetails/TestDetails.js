@@ -1,57 +1,66 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { getAllTestAction } from "../../../redux/actions/teacherTestAction";
+import { Button, Typography } from "antd";
+import {
+  getAllTestAction,
+  goBackToAllTest,
+} from "../../../redux/actions/teacherTestAction";
 import TestTable from "../../molecues/TestTable/TestTable";
-import { Button } from "@material-ui/core";
-import { goBackToAllTest } from "../../../redux/actions/teacherTestAction";
 import ViewTest from "../CreateTestForm/ViewTest";
 
-const useStyles = (theme)=> ({
-  testDetails : {
-    margin:'20px',
-    display: 'inline-block',
-    textAlign : 'center',
-  },
-  testTitle : {
-    fontSize : '1.7em',
-    textAlign : 'center',
-    margin : '20px'
-  }
-})
+const { Title } = Typography;
 
 class TestDetails extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {
-    }
+    this.state = {};
   }
 
   render() {
-    if(this.props.testDetails.searched === true) {
-      return(<div>
-        <ViewTest/>
-        <Button onClick={()=>(this.props.goBackToAllTest())}>Back</Button>
-      </div>)
+    const titleStyle = {
+      textAlign: "center",
+      margin: "20px",
+    };
+
+    if (this.props.testDetails.searched === true) {
+      return (
+        <div style={{ textAlign: "center", margin: "20px" }}>
+          <ViewTest />
+
+          <Button
+            type="primary"
+            style={{ marginTop: "20px" }}
+            onClick={() => this.props.goBackToAllTest()}
+          >
+            Back
+          </Button>
+        </div>
+      );
     }
-    if(this.props.testDetails.retrived === false) {
+
+    if (this.props.testDetails.retrived === false) {
       this.props.getAllTestAction();
-      return (<div></div>)
+      return <div></div>;
     } else {
-      return(<div>
-        <div className={this.props.classes.testTitle} color="primary">All Tests</div>
-        <TestTable></TestTable>
-        </div>)
+      return (
+        <div>
+          <Title level={3} style={titleStyle}>
+            All Tests
+          </Title>
+
+          <TestTable />
+        </div>
+      );
     }
   }
 }
 
-const mapStatetoProps = state => ({
-  user : state.user,
-  testDetails : state.testDetails
-})
+const mapStatetoProps = (state) => ({
+  user: state.user,
+  testDetails: state.testDetails,
+});
 
-export default withStyles(useStyles)(connect(mapStatetoProps,{
+export default connect(mapStatetoProps, {
   getAllTestAction,
-  goBackToAllTest
-})(TestDetails));
+  goBackToAllTest,
+})(TestDetails);

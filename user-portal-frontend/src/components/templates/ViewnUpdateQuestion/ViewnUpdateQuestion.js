@@ -1,299 +1,182 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
+import { Form, Input, Button, Select, InputNumber, Typography } from "antd";
 import { setAlert } from "../../../redux/actions/alertAction";
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import { getSubjectDetails } from '../../../redux/actions/subjectAction';
+import { getSubjectDetails } from "../../../redux/actions/subjectAction";
 import { updateQuestionAction } from "../../../redux/actions/questionAction";
-import { TextareaAutosize } from "@material-ui/core";
 
-
-
-const useStyles = ()=>({
-  questionInput:{
-    marginTop:'20px',
-    display : 'block'
-  },
-  optionInput : {
-    display:'inline-block',
-    margin :'20px 20px 0px'
-  },
-  inputfield : {
-    display : 'block',
-    margin : '10px 20px 0px'
-  },
-  btn : {
-    margin : '20px 40px',
-    display:'inline-block'
-  },
-  formClass : {
-    margin:'20px',
-    display: 'inline-block',
-    textAlign : 'center',
-    border : '1px solid black',
-    borderRadius: '10px',
-    padding : '20px'
-  },
-  
-  formTitle:{
-    fontSize: '1.7em'
-  },
-  textarea : {
-    fontSize: '1.1em',
-    padding:'5px',
-    margin:'20px 20px 0px 0px',
-    minWidth:'60%'
-  }
-})
-
-
+const { TextArea } = Input;
+const { Option } = Select;
+const { Title } = Typography;
 
 class ViewnUpdateQuestion extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      id:this.props.question._id,
-      body : this.props.question.body,
-      options : this.props.question.options,
-      subject : this.props.question.subject,
-      answer : this.props.question.answer === '' ? 'None' : this.props.question.answer,
-      marks : this.props.question.marks,
-      explanation : this.props.question.explanation
-    }
+      id: props.question._id,
+      body: props.question.body,
+      options: props.question.options,
+      subject: props.question.subject,
+      answer: props.question.answer === "" ? "None" : props.question.answer,
+      marks: props.question.marks,
+      explanation: props.question.explanation,
+    };
   }
 
-  bodyInputHandler = (event) => {
-    this.setState({
-      ...this.state,
-      body : event.target.value
-    });
-  }
+  bodyInputHandler = (e) => {
+    this.setState({ body: e.target.value });
+  };
 
-  optionInputHandler = (event,i) => {
-    var opt = this.state.options
-    opt[i] = event.target.value
-    this.setState({
-      ...this.state,
-      options :opt
-    })
-  }
+  optionInputHandler = (e, i) => {
+    const options = [...this.state.options];
+    options[i] = e.target.value;
+    this.setState({ options });
+  };
 
-  subjectInputHandler = (event) => {
-    this.setState({
-      ...this.state,
-      subject : event.target.value
-    })
-  }
+  subjectInputHandler = (value) => {
+    this.setState({ subject: value });
+  };
 
-  answerInputHandler = (event) => {
-    this.setState({
-      ...this.state,
-      answer : event.target.value
-    })
-  }
+  answerInputHandler = (value) => {
+    this.setState({ answer: value });
+  };
 
-  setAnswerValue = () => {
-    if(this.props.answer < 0) {
-      return 
-    }
-  }
+  marksInputHandler = (value) => {
+    this.setState({ marks: value });
+  };
 
-  marksInputHandler = (event) => {
-    this.setState({
-      ...this.state,
-      marks : event.target.value
-    })
-  }
+  explanationInputHandler = (e) => {
+    this.setState({ explanation: e.target.value });
+  };
 
-  explanationInputHandler = (event) => {
-    this.setState({
-      ...this.state,
-      explanation : event.target.value
-    })
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    if(this.state.answer === 'None'){
-      console.log('answer error');
+  handleSubmit = () => {
+    if (this.state.answer === "None") {
       this.props.setAlert({
-        isAlert:true,
-        type:'error',
-        title:'invalid input',
-        message:'please select subject'
-      })
+        isAlert: true,
+        type: "error",
+        title: "Invalid input",
+        message: "Please select answer",
+      });
       return;
     }
+
     this.props.updateQuestionAction(this.state);
-  }
+  };
 
   render() {
-    if(this.props.subjectDetails.retrived === false) {
+    if (!this.props.subjectDetails.retrived) {
       this.props.getSubjectDetails();
-      return (<div></div>);
+      return <div></div>;
     }
+
     return (
-      <form className={this.props.classes.formClass} onSubmit={(event)=>(this.handleSubmit(event))}>
-        <div className={this.props.classes.formTitle} color="primary">View and Update question</div>
-        <TextField
-          variant='outlined'
-          color="primary"
-          className={this.props.classes.questionInput}
-          label="Question"
-          placeholder='enter question'
-          type='text'
-          error_text=''
-          value={this.state.body}
-          onChange={(event)=>(this.bodyInputHandler(event))}
-          required
-          fullWidth
-        />
-        <TextField
-          variant='outlined'
-          color="primary"
-          className={this.props.classes.optionInput}
-          label="Option A"
-          placeholder='enter option'
-          type='text'
-          error_text=''
-          value={this.state.options[0]}
-          onChange={(event)=>(this.optionInputHandler(event,0))}
-          required
-        />
-        <TextField
-          variant='outlined'
-          color="primary"
-          className={this.props.classes.optionInput}
-          label="Option B"
-          placeholder='enter option'
-          type='text'
-          error_text=''
-          value={this.state.options[1]}
-          onChange={(event)=>(this.optionInputHandler(event,1))}
-          required
-        />
-        <br/>
-        <TextField
-          variant='outlined'
-          color="primary"
-          className={this.props.classes.optionInput}
-          label="Option C"
-          placeholder='enter option'
-          type='text'
-          error_text=''
-          value={this.state.options[2]}
-          onChange={(event)=>(this.optionInputHandler(event,2))}
-          required
-        />
-        <TextField
-          variant='outlined'
-          color="primary"
-          className={this.props.classes.optionInput}
-          label="Option D"
-          placeholder='enter option'
-          type='text'
-          error_text=''
-          value={this.state.options[3]}
-          onChange={(event)=>(this.optionInputHandler(event,3))}
-          required
-        />
-        <br/>
-        <TextField
-          variant='outlined'
-          color="primary"
-          className={this.props.classes.optionInput}
-          label="Marks"
-          placeholder='enter marks'
-          type='number'
-          error_text=''
-          value={this.state.marks}
-          onChange={(event)=>(this.marksInputHandler(event))}
-          required
-          InputProps={{
-            inputProps: { 
-              max: 4, min: 1 
-            }
-          }}
-        />
-        <br/>
-        <InputLabel htmlFor='subject-label' className={this.props.classes.optionInput}>Subject</InputLabel>
-        <Select
-          native
-          value={this.state.subject}
-          onChange={(event)=>(this.subjectInputHandler(event))}
-          label="Subject"
-          inputProps={{
-            name:'subject',
-            id:'subject-label'
-          }}
-          required
-          className={this.props.classes.optionInput}
-        >
-          {this.props.subjectDetails.list.map((sub) => (
-            <option key={sub.id} value={sub.id} >
-              {sub.subject}
-            </option>
-          ))}
+      <div
+        style={{
+          margin: "20px",
+          padding: "25px",
+          border: "1px solid #ddd",
+          borderRadius: "10px",
+          maxWidth: "700px",
+        }}
+      >
+        <Title level={3}>View and Update Question</Title>
 
-        </Select>
-        <InputLabel htmlFor='answer-label' className={this.props.classes.optionInput}>Answer</InputLabel>
-        <Select
-          native
-          value={this.state.answer}
-          onChange={(event)=>(this.answerInputHandler(event))}
-          label="Answer"
-          inputProps={{
-            name:'answer',
-            id:'answer-label'
-          }}
-          required
-          className={this.props.classes.optionInput}
-          
-        >
-          <option value='None'></option>
-          <option value={this.state.options[0]}> option A</option>
-          <option value={this.state.options[1]}> option B</option>
-          <option value={this.state.options[2]}> option C</option>
-          <option value={this.state.options[3]}> option D</option>
+        <Form layout="vertical" onFinish={this.handleSubmit}>
+          <Form.Item label="Question">
+            <Input value={this.state.body} onChange={this.bodyInputHandler} />
+          </Form.Item>
 
-        </Select>
-        <br/>
-        <InputLabel htmlFor='explanation-label' className={this.props.classes.optionInput}>Explanation</InputLabel>
-        <TextareaAutosize
-          variant='outlined'
-          color="primary"
-          id="explanation"
-          placeholder='enter explanation'
-          value={this.state.explanation || ''}
-          onChange={(event)=>(this.explanationInputHandler(event))}
-          className={this.props.classes.textarea}
-          minRows={3}
-        />
-        <br/>
-        <Button 
-          variant='contained'
-          color="primary"
-          type='submit'
-          className={this.props.classes.btn}
-        >
-          Submit
-        </Button>
-      </form>
-    )
+          <Form.Item label="Option A">
+            <Input
+              value={this.state.options[0]}
+              onChange={(e) => this.optionInputHandler(e, 0)}
+            />
+          </Form.Item>
+
+          <Form.Item label="Option B">
+            <Input
+              value={this.state.options[1]}
+              onChange={(e) => this.optionInputHandler(e, 1)}
+            />
+          </Form.Item>
+
+          <Form.Item label="Option C">
+            <Input
+              value={this.state.options[2]}
+              onChange={(e) => this.optionInputHandler(e, 2)}
+            />
+          </Form.Item>
+
+          <Form.Item label="Option D">
+            <Input
+              value={this.state.options[3]}
+              onChange={(e) => this.optionInputHandler(e, 3)}
+            />
+          </Form.Item>
+
+          <Form.Item label="Marks">
+            <InputNumber
+              min={1}
+              max={4}
+              value={this.state.marks}
+              onChange={this.marksInputHandler}
+            />
+          </Form.Item>
+
+          <Form.Item label="Subject">
+            <Select
+              value={this.state.subject}
+              onChange={this.subjectInputHandler}
+            >
+              {this.props.subjectDetails.list.map((sub) => (
+                <Option key={sub.id} value={sub.id}>
+                  {sub.subject}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item label="Answer">
+            <Select
+              value={this.state.answer}
+              onChange={this.answerInputHandler}
+            >
+              <Option value="None">None</Option>
+              <Option value={this.state.options[0]}>Option A</Option>
+              <Option value={this.state.options[1]}>Option B</Option>
+              <Option value={this.state.options[2]}>Option C</Option>
+              <Option value={this.state.options[3]}>Option D</Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item label="Explanation">
+            <TextArea
+              rows={3}
+              value={this.state.explanation || ""}
+              onChange={this.explanationInputHandler}
+            />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Update Question
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    );
   }
 }
 
-const mapStatetoProps = state => ({
-  subjectDetails : state.subjectDetails,
-  question : state.questionDetails.question,
-  answer : state.questionDetails.answer
-})
+const mapStatetoProps = (state) => ({
+  subjectDetails: state.subjectDetails,
+  question: state.questionDetails.question,
+  answer: state.questionDetails.answer,
+});
 
-export default withStyles(useStyles)(connect(mapStatetoProps,{
+export default connect(mapStatetoProps, {
   getSubjectDetails,
   setAlert,
-  updateQuestionAction
-})(ViewnUpdateQuestion));
+  updateQuestionAction,
+})(ViewnUpdateQuestion);

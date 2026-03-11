@@ -1,65 +1,67 @@
-import React from 'react';
-import AlertBox from '../../atoms/Alertbox/AlertBox';
-import StudentRegisterForm from '../../templates/studentRegisterForm/studentRegisterForm';
-import { Button } from '@material-ui/core';
-import { AppBar, Toolbar, Typography, withStyles } from '@material-ui/core';
-import { Navigate } from 'react-router-dom';
+import React from "react";
+import { Layout, Typography, Button } from "antd";
+import { Navigate } from "react-router-dom";
 
-const useStyles = (theme) => ({
-  addHeight : theme.mixins.toolbar,
-  title : {
-    flexGrow : 1
-  },
-  main : {
-    textAlign : 'center',
-    paddingTop : '5%'
-  }
-})
+import AlertBox from "../../atoms/Alertbox/AlertBox";
+import StudentRegisterForm from "../../templates/studentRegisterForm/studentRegisterForm";
+
+const { Header, Content } = Layout;
+const { Title } = Typography;
 
 class StudentRegisterPage extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      gotoHome: false
-    }
+      gotoHome: false,
+    };
   }
 
   onHomeClick() {
     this.setState({
-      ...this.state,
-      gotoHome : true
-    })
+      gotoHome: true,
+    });
   }
 
   render() {
-    if(this.state.gotoHome) {
-      return (<Navigate to='/'/>)
+    if (this.state.gotoHome) {
+      return <Navigate to="/" />;
     }
-    return(
-      <div>
-          <AppBar
-          elevation={0}
-          className={this.props.classes.appbar}
-          >
-            <Toolbar>
-                  <Typography variant='h5' className={this.props.classes.title}>
-                    Student Register 
-                  </Typography>
-                  <Typography variant='h6'>
-                    <Button variant="contained" className={this.props.classes.endtestbtn} onClick={()=>(this.onHomeClick())}>Home</Button>
-                  </Typography>
-            </Toolbar>
-          </AppBar>
-          <div className={this.props.classes.addHeight}></div>
-          <div className={this.props.classes.main}>
-          <AlertBox/>
-          <StudentRegisterForm/>
-          </div>
-        </div>
-    )
+
+    return (
+      <Layout style={{ minHeight: "100vh" }}>
+        {/* Header */}
+        <Header
+          style={{
+            background: "#fff",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "0 20px",
+          }}
+        >
+          <Title level={4} style={{ margin: 0 }}>
+            Student Register
+          </Title>
+
+          <Button type="primary" onClick={() => this.onHomeClick()}>
+            Home
+          </Button>
+        </Header>
+
+        {/* Content */}
+        <Content
+          style={{
+            textAlign: "center",
+            paddingTop: "5%",
+          }}
+        >
+          <AlertBox />
+          <StudentRegisterForm />
+        </Content>
+      </Layout>
+    );
   }
 }
 
-
-export default withStyles(useStyles)(StudentRegisterPage);
-
+export default StudentRegisterPage;

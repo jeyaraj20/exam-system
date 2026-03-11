@@ -1,160 +1,129 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
-import { registerStudentAction } from "../../../redux/actions/registerStudentAction";
 import { connect } from "react-redux";
+import { Form, Input, Button, Typography } from "antd";
+import { registerStudentAction } from "../../../redux/actions/registerStudentAction";
 import { setAlert } from "../../../redux/actions/alertAction";
 
-const useStyles = ()=>({
-  inputfield : {
-    display:'block',
-    margin :'20px'
-  },
-  btn : {
-    margin : '0px 40px'
-  },
-  formClass : {
-    margin:'20px',
-    display: 'inline-block',
-    textAlign : 'center',
-    border : '1px solid black',
-    borderRadius: '10px',
-    padding : '20px'
-  },
-  
-  formTitle:{
-    fontSize: '1.7em'
-  }
-})
+const { Title } = Typography;
 
 class StudentRegisterForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username : "",
-      email : "",
-      password : "",
-      confirmPassword : ""
-    }
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
   }
 
-  usernameInputHandler = (event) => {
-    this.setState({
-      ...this.state,
-      username : event.target.value
-    });
-  }
+  usernameInputHandler = (e) => {
+    this.setState({ username: e.target.value });
+  };
 
-  emailInputHandler = (event) => {
-    this.setState({
-      ...this.state,
-      email : event.target.value
-    });
-  }
+  emailInputHandler = (e) => {
+    this.setState({ email: e.target.value });
+  };
 
-  passwordInputHandler = (event) => {
-    this.setState({
-      ...this.state,
-      password : event.target.value
-    });
-  }
+  passwordInputHandler = (e) => {
+    this.setState({ password: e.target.value });
+  };
 
-  confirmpasswordInputHandler = (event) => {
-    this.setState({
-      ...this.state,
-      confirmPassword : event.target.value
-    });
-  }
+  confirmpasswordInputHandler = (e) => {
+    this.setState({ confirmPassword: e.target.value });
+  };
 
-  handleSubmit(event) {
-    event.preventDefault();
-    if(this.state.confirmPassword !== this.state.password) {
+  handleSubmit = () => {
+    if (this.state.confirmPassword !== this.state.password) {
       this.props.setAlert({
-        isAlert:false,
-        type:"error",
-        title:'Invalid Input',
-        message : 'Confirm Password does not match',
-      })  
+        isAlert: false,
+        type: "error",
+        title: "Invalid Input",
+        message: "Confirm Password does not match",
+      });
       return;
     }
+
     this.props.registerStudentAction({
-      username : this.state.username,
-      email : this.state.email,
-      password : this.state.password
+      username: this.state.username,
+      email: this.state.email,
+      password: this.state.password,
     });
-  }
+  };
 
   render() {
     return (
-      <form className={this.props.classes.formClass} onSubmit={(event)=>(this.handleSubmit(event))}>
-        <div className={this.props.classes.formTitle} color="primary">Register</div>
-        <TextField
-          variant='outlined'
-          color="primary"
-          className={this.props.classes.inputfield}
-          label="Username"
-          placeholder='enter username'
-          type='text'
-          error_text=''
-          value={this.state.username}
-          onChange={(event)=>(this.usernameInputHandler(event))}
-          required
-        />
-        <TextField
-          variant='outlined'
-          color="primary"
-          className={this.props.classes.inputfield}
-          label="Email"
-          placeholder='enter email'
-          type='email'
-          error_text=''
-          value={this.state.email}
-          onChange={(event)=>(this.emailInputHandler(event))}
-          required
-        />
-        <TextField
-          variant='outlined'
-          color="primary"
-          label="Password"
-          className={this.props.classes.inputfield}
-          placeholder='enter password'
-          type='password'
-          error_text=''
-          value={this.state.password}
-          onChange={(event)=>(this.passwordInputHandler(event))}
-          required
-        />
-        <TextField
-          variant='outlined'
-          color="primary"
-          label="Confirm Password"
-          className={this.props.classes.inputfield}
-          placeholder='enter password again'
-          type='password'
-          error_text=''
-          value={this.state.confirmPassword}
-          onChange={(event)=>(this.confirmpasswordInputHandler(event))}
-          required
-        />
-        <Button 
-          variant='contained'
-          color="primary"
-          type='submit'
-          className={this.props.classes.btn}
-        >
-          Register
-        </Button>
-      </form>
-    )
+      <div
+        style={{
+          margin: "20px",
+          display: "inline-block",
+          textAlign: "center",
+          border: "1px solid #ddd",
+          borderRadius: "10px",
+          padding: "30px",
+          minWidth: "350px",
+        }}
+      >
+        <Title level={3}>Register</Title>
+
+        <Form layout="vertical" onFinish={this.handleSubmit}>
+          <Form.Item
+            label="Username"
+            rules={[{ required: true, message: "Please enter username" }]}
+          >
+            <Input
+              placeholder="Enter username"
+              value={this.state.username}
+              onChange={this.usernameInputHandler}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label="Email"
+            rules={[{ required: true, message: "Please enter email" }]}
+          >
+            <Input
+              type="email"
+              placeholder="Enter email"
+              value={this.state.email}
+              onChange={this.emailInputHandler}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label="Password"
+            rules={[{ required: true, message: "Please enter password" }]}
+          >
+            <Input.Password
+              placeholder="Enter password"
+              value={this.state.password}
+              onChange={this.passwordInputHandler}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label="Confirm Password"
+            rules={[{ required: true, message: "Please confirm password" }]}
+          >
+            <Input.Password
+              placeholder="Enter password again"
+              value={this.state.confirmPassword}
+              onChange={this.confirmpasswordInputHandler}
+            />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Register
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    );
   }
 }
 
-const mapStatetoProps = state => ({
-
-})
-
-export default withStyles(useStyles)(connect(mapStatetoProps,{
+export default connect(null, {
   registerStudentAction,
-  setAlert
-})(StudentRegisterForm));
+  setAlert,
+})(StudentRegisterForm);

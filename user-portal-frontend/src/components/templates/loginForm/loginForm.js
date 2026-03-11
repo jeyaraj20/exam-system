@@ -1,95 +1,78 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
-import './loginForm.css';
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
-import { loginRequestAction } from "../../../redux/actions/loginAction";
 import { connect } from "react-redux";
+import { Form, Input, Button, Typography } from "antd";
+import { loginRequestAction } from "../../../redux/actions/loginAction";
+import "./loginForm.css";
 
-const useStyles = ()=>({
-  inputfield : {
-    display:'block',
-    margin :'20px'
-  },
-  loginbtn : {
-    margin : '0px 40px'
-  }
-})
+const { Title } = Typography;
 
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email : "",
-      password : ""
-    }
-  } 
-
-  emailInputHandler = (event) => {
-    this.setState({
-      ...this.state,
-      email : event.target.value
-    });
+      email: "",
+      password: "",
+    };
   }
 
-  passwordInputHandler = (event) => {
-    this.setState({
-      ...this.state,
-      password : event.target.value
-    });
-  }
+  emailInputHandler = (e) => {
+    this.setState({ email: e.target.value });
+  };
 
-  handleSubmit(event) {
-    event.preventDefault();
+  passwordInputHandler = (e) => {
+    this.setState({ password: e.target.value });
+  };
+
+  handleSubmit = () => {
     this.props.loginRequestAction(this.state);
-  }
+  };
 
   render() {
     return (
-      <form className="form-class" onSubmit={(event)=>(this.handleSubmit(event))}>
-        <div className="form-title" color="primary">LOGIN</div>
-        <TextField
-          variant='outlined'
-          color="primary"
-          className={this.props.classes.inputfield}
-          label="Email"
-          placeholder='enter email'
-          type='email'
-          error_text=''
-          value={this.state.email}
-          onChange={(event)=>(this.emailInputHandler(event))}
-          required
-        />
-        <TextField
-          variant='outlined'
-          color="primary"
-          label="Password"
-          className={this.props.classes.inputfield}
-          placeholder='enter password'
-          type='password'
-          error_text=''
-          value={this.state.password}
-          onChange={(event)=>(this.passwordInputHandler(event))}
-          required
-        />
-        <Button 
-          variant='contained'
-          color="primary"
-          type='submit'
-          className={this.props.classes.loginbtn}
-        >
-          Login
-        </Button>
-      </form>
-    )
+      <div className="form-class">
+        <Title level={3} style={{ textAlign: "center" }}>
+          LOGIN
+        </Title>
+
+        <Form layout="vertical" onFinish={this.handleSubmit}>
+          <Form.Item
+            label="Email"
+            rules={[{ required: true, message: "Please enter email" }]}
+          >
+            <Input
+              placeholder="Enter email"
+              type="email"
+              value={this.state.email}
+              onChange={this.emailInputHandler}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label="Password"
+            rules={[{ required: true, message: "Please enter password" }]}
+          >
+            <Input.Password
+              placeholder="Enter password"
+              value={this.state.password}
+              onChange={this.passwordInputHandler}
+            />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Login
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    );
   }
 }
 
-const mapStatetoProps = state => ({
-  state : state.user
-})
+const mapStatetoProps = (state) => ({
+  state: state.user,
+});
 
-export default withStyles(useStyles)(connect(mapStatetoProps,{
-  loginRequestAction
-})(LoginForm));
-
+export default connect(mapStatetoProps, {
+  loginRequestAction,
+})(LoginForm);

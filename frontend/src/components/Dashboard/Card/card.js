@@ -1,52 +1,67 @@
-import { makeStyles } from "@material-ui/core"
+import React from "react";
+import { Card, Typography } from "antd";
 
-const useStyles = makeStyles({
-  card_main:{
-    background:'white',
-    display:'inline-block',
-    padding:'20px 0px 10px 10px',
-    margin:30,
-    borderRadius:10
-  },
-  name:{
-    marginBottom:20,
-    marginLeft:10,
-    fontSize:15,
-    fontWeight:500
-  },
-  d:{
-    display:'flex',
-    color:'darkblue'
-  },
-  d1:{
-    paddingTop:10,
-    fontSize:40,
-    fontWeight:700
-  },
-  d2:{
-    paddingTop:30,
-    fontSize:20,
-    fontWeight:600
-  },
-  img:{
-    marginLeft:30,
-    width:120,
-    height:100
-  }
-})
+const { Text } = Typography;
 
-export const MainCard = (props)=>{
-  const classes = useStyles();
-  return(
-    <div className={classes.card_main}>
-      <div className={classes.name}>
+export const MainCard = (props) => {
+  return (
+    <Card
+      style={{
+        background: "white",
+        display: "inline-block",
+        margin: 30,
+        borderRadius: 10,
+        padding: "10px 20px",
+      }}
+      bodyStyle={{ padding: "10px" }}
+    >
+      <div
+        style={{
+          marginBottom: 20,
+          fontSize: 15,
+          fontWeight: 500,
+        }}
+      >
         {props.title}
       </div>
-      <div className={classes.d}>
-        <span className={classes.d1}>{props.value}</span>
-        <span className={classes.d2}>/{props.total}</span>
-        <img src={props.image} className={classes.img} alt=''/>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          color: "darkblue",
+        }}
+      >
+        <span
+          style={{
+            fontSize: 40,
+            fontWeight: 700,
+          }}
+        >
+          {props.value}
+        </span>
+
+        <span
+          style={{
+            fontSize: 20,
+            fontWeight: 600,
+            marginTop: 10,
+            marginLeft: 5,
+          }}
+        >
+          /{props.total}
+        </span>
+
+        <img
+          src={props.image}
+          alt=""
+          style={{
+            marginLeft: 30,
+            width: 120,
+            height: 100,
+          }}
+        />
       </div>
-    </div>
-  )
-}
+    </Card>
+  );
+};

@@ -1,42 +1,38 @@
-import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import { createTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import './header.css';
+import React from "react";
+import { Layout, Typography } from "antd";
+import "./header.css";
 
-const useStyles = makeStyles({
-  logoimg : {
-    margin:0,
-    padding:0,
-    height:50
-  },
-  name :{
-    margin : 20,
-    color:'#07cfda'
-  }
-})
+const { Header } = Layout;
+const { Title } = Typography;
 
-const theme = createTheme({
-  palette:{
-    primary:{
-      main:'#00000077'
-    }
-  }
-})
-
-export const HomepageHeader = (props)=>{
-  const classes = useStyles();
+export const HomepageHeader = (props) => {
   return (
-    <ThemeProvider theme={theme}>
-      <AppBar>
-        <Toolbar>
-          <img src={props.img} alt="Logo" className={classes.logoimg}/>
-          <div className={classes.name} >
-            {props.title}
-          </div>
-        </Toolbar>
-      </AppBar>
-    </ThemeProvider>
-      
+    <Header
+      style={{
+        background: "#00000077",
+        display: "flex",
+        alignItems: "center",
+        padding: "0 20px",
+      }}
+    >
+      <img
+        src={props.img}
+        alt="Logo"
+        style={{
+          height: 50,
+          marginRight: 20,
+        }}
+      />
+
+      <Title
+        level={4}
+        style={{
+          margin: 0,
+          color: "#07cfda",
+        }}
+      >
+        {props.title}
+      </Title>
+    </Header>
   );
-}
+};

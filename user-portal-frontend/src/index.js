@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import reportWebVitals from "./reportWebVitals";
 import store from "./redux/store";
 
+import "antd/dist/reset.css";
 import "./assets/css/style.css";
 import "./assets/css/style.z.css";
 import "./assets/css/antd.customize.css";

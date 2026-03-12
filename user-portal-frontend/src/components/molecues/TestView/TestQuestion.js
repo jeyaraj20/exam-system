@@ -26,6 +26,7 @@ class TestQuestion extends React.Component {
 
     return (
       <Card
+        className="table-card"
         style={{ margin: 15, borderRadius: 12 }}
         bodyStyle={{ padding: 20 }}
       >

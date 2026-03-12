@@ -8,7 +8,6 @@ const CreateTestForm = () => {
   const dispatch = useDispatch();
   const subjectDetails = useSelector((state) => state.subjectDetails);
 
-  // Using a single object to hold all refs to keep the code clean
   const formRefs = {
     title: useRef(),
     maxmarks: useRef(),
@@ -20,7 +19,6 @@ const CreateTestForm = () => {
     resultTime: useRef(),
   };
 
-  // Checkboxes need special handling since they are lists
   const subjectsRef = useRef([]);
   const queTypesRef = useRef([]);
 
@@ -43,7 +41,6 @@ const CreateTestForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // 1. Extract values from refs
     const subjects = subjectsRef.current
       .filter((el) => el && el.checked)
       .map((el) => el.name);
@@ -54,47 +51,65 @@ const CreateTestForm = () => {
 
     const durMs = timeStringtoMs(formRefs.duration.current.value);
 
+    const regStart = new Date(formRefs.regStartTime.current.value);
+    const regEnd = new Date(formRefs.regEndTime.current.value);
+    const testStart = new Date(formRefs.startTime.current.value);
+    const testEnd = new Date(formRefs.endTime.current.value);
+    const result = new Date(formRefs.resultTime.current.value);
+
     const payload = {
       title: formRefs.title.current.value,
       subjects,
       queTypes,
       maxmarks: parseInt(formRefs.maxmarks.current.value),
-      duration: durMs / 1000, // Seconds for backend
-      regStartTime: formRefs.regStartTime.current.value,
-      regEndTime: formRefs.regEndTime.current.value,
-      startTime: formRefs.startTime.current.value,
-      endTime: formRefs.endTime.current.value,
-      resultTime: formRefs.resultTime.current.value,
+      duration: durMs / 1000,
+      regStartTime: regStart,
+      regEndTime: regEnd,
+      startTime: testStart,
+      endTime: testEnd,
+      resultTime: result,
     };
-    // 2. Validation Logic
-    if (payload.subjects.length < 1)
+
+    if (subjects.length < 1)
       return sendAlert("error", "Error", "Select a subject");
-    if (payload.queTypes.length < 1)
+
+    if (queTypes.length < 1)
       return sendAlert("error", "Error", "Select question type");
 
-    const times = {
-      regStart: Date.parse(payload.regStartTime),
-      regEnd: Date.parse(payload.regEndTime),
-      testStart: Date.parse(payload.startTime),
-      testEnd: Date.parse(payload.endTime),
-      result: Date.parse(payload.resultTime),
-    };
-    console.log(times, "Sdfgxhj");
-    // if (times.regStart >= times.regEnd)
-    //   return sendAlert("error", "Error", "Invalid Registration Window");
-    // if (times.regEnd >= times.testStart)
-    //   return sendAlert(
-    //     "error",
-    //     "Error",
-    //     "Registration must end before Test starts",
-    //   );
+    if (regStart >= regEnd)
+      return sendAlert(
+        "error",
+        "Invalid Time",
+        "Registration start must be before registration end",
+      );
 
-    // if (times.testStart >= times.testEnd)
-    //   return sendAlert("error", "Error", "Invalid Test Window");
-    // if (times.testEnd >= times.result)
-    //   return sendAlert("error", "Error", "Result must be after Test");
-    // if (times.testEnd - times.testStart - durMs < 0)
-    //   return sendAlert("error", "Error", "Test duration exceeds window");
+    if (regEnd >= testStart)
+      return sendAlert(
+        "error",
+        "Invalid Time",
+        "Registration must end before test start",
+      );
+
+    if (testStart >= testEnd)
+      return sendAlert(
+        "error",
+        "Invalid Time",
+        "Test start must be before test end",
+      );
+
+    if (testEnd >= result)
+      return sendAlert(
+        "error",
+        "Invalid Time",
+        "Result time must be after test end",
+      );
+
+    if (testEnd - testStart < durMs)
+      return sendAlert(
+        "error",
+        "Invalid Duration",
+        "Test duration exceeds available exam time",
+      );
 
     dispatch(createTestAction(payload));
   };
@@ -104,7 +119,7 @@ const CreateTestForm = () => {
   return (
     <div className="test-page">
       <div className="test-card">
-        <h2 className="form-title">Create Test (Uncontrolled)</h2>
+        <h2 className="form-title">Create Test</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -161,8 +176,9 @@ const CreateTestForm = () => {
                 required
               />
             </div>
+
             <div className="form-group">
-              <label>Duration</label>
+              <label>Duration (HH:MM)</label>
               <input
                 ref={formRefs.duration}
                 type="time"
@@ -174,15 +190,16 @@ const CreateTestForm = () => {
 
           <div className="row">
             <div className="form-group">
-              <label>Reg Start</label>
+              <label>Registration Start</label>
               <input
                 ref={formRefs.regStartTime}
                 type="datetime-local"
                 required
               />
             </div>
+
             <div className="form-group">
-              <label>Reg End</label>
+              <label>Registration End</label>
               <input ref={formRefs.regEndTime} type="datetime-local" required />
             </div>
           </div>
@@ -192,6 +209,7 @@ const CreateTestForm = () => {
               <label>Test Start</label>
               <input ref={formRefs.startTime} type="datetime-local" required />
             </div>
+
             <div className="form-group">
               <label>Test End</label>
               <input ref={formRefs.endTime} type="datetime-local" required />

@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Layout, Menu, Typography } from "antd";
+import { Layout, Menu, Typography, Drawer, Button } from "antd";
+import { MenuOutlined } from "@ant-design/icons";
 import { Navigate } from "react-router-dom";
 
 import LogoutButton from "../../atoms/LogoutButton/LogoutButton";
@@ -20,7 +21,10 @@ class StudentHomepage extends React.Component {
     super(props);
 
     this.state = {
+      mobile: window.innerWidth < 768,
+      drawerVisible: false,
       content: <div>Welcome to Exam portal</div>,
+
       menuList: [
         {
           key: "home",
@@ -46,11 +50,49 @@ class StudentHomepage extends React.Component {
     };
   }
 
-  onMenuItemClick = (content) => {
+  componentDidMount() {
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize = () => {
     this.setState({
-      content: content,
+      mobile: window.innerWidth < 768,
     });
   };
+
+  onMenuItemClick = (content) => {
+    this.setState({
+      content,
+      drawerVisible: false,
+    });
+  };
+
+  toggleDrawer = () => {
+    this.setState({
+      drawerVisible: !this.state.drawerVisible,
+    });
+  };
+
+  renderMenu = () => (
+    <Menu theme="dark" mode="inline">
+      {this.state.menuList.map((item) => (
+        <Menu.Item
+          key={item.key}
+          onClick={() => this.onMenuItemClick(item.content)}
+        >
+          {item.title}
+        </Menu.Item>
+      ))}
+
+      <Menu.Item>
+        <LogoutButton />
+      </Menu.Item>
+    </Menu>
+  );
 
   render() {
     if (!Auth.retriveToken() || Auth.retriveToken() === "undefined") {
@@ -64,25 +106,21 @@ class StudentHomepage extends React.Component {
 
     return (
       <Layout style={{ minHeight: "100vh" }}>
-        {/* Sidebar */}
-        <Sider width={220}>
-          <Menu theme="dark" mode="inline">
-            {this.state.menuList.map((item) => (
-              <Menu.Item
-                key={item.key}
-                onClick={() => this.onMenuItemClick(item.content)}
-              >
-                {item.title}
-              </Menu.Item>
-            ))}
+        {/* Desktop Sidebar */}
+        {!this.state.mobile && <Sider width={220}>{this.renderMenu()}</Sider>}
 
-            <Menu.Item>
-              <LogoutButton />
-            </Menu.Item>
-          </Menu>
-        </Sider>
+        {/* Mobile Drawer */}
+        {this.state.mobile && (
+          <Drawer
+            placement="left"
+            open={this.state.drawerVisible}
+            onClose={this.toggleDrawer}
+            bodyStyle={{ padding: 0 }}
+          >
+            {this.renderMenu()}
+          </Drawer>
+        )}
 
-        {/* Main Layout */}
         <Layout>
           {/* Header */}
           <Header
@@ -94,11 +132,20 @@ class StudentHomepage extends React.Component {
               padding: "0 20px",
             }}
           >
-            <Title level={4} style={{ margin: 0 }}>
-              Student Homepage
-            </Title>
+            {/* Mobile Menu Button */}
+            {this.state.mobile && (
+              <Button
+                type="text"
+                icon={<MenuOutlined />}
+                onClick={this.toggleDrawer}
+              />
+            )}
 
-            <Title level={5} style={{ margin: 0 }}>
+            {/* <Title level={4} style={{ margin: 0 }}>
+              Student Homepage
+            </Title> */}
+
+            <Title level={4} style={{ margin: 0 }}>
               Welcome, {this.props.user.userDetails.username} !!
             </Title>
           </Header>

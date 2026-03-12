@@ -90,6 +90,7 @@ class TestResultStudent extends React.Component {
             columns={columns}
             dataSource={data}
             pagination={false}
+            scroll={{ x: true }}
             bordered
           />
         </Card>

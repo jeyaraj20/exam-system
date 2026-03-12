@@ -75,6 +75,7 @@ class QuestionTable extends React.Component {
           dataSource={this.props.questionlist}
           rowKey="_id"
           pagination={false}
+          scroll={{ x: true }}
         />
       </div>
     );

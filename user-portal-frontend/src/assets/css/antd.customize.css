@@ -272,7 +272,11 @@
     margin: 16px 0px 16px auto;
   }
 }
-
+.app-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: auto;
+}
 .custom-tag.ant-tag {
   font-family: "Manrope";
   font-size: 12px;
@@ -1446,5 +1450,14 @@
 
   .pt-m-0 {
     padding-top: 0px;
+  }
+}
+@media (max-width: 768px) {
+  .ant-layout-header h4 {
+    font-size: 18px;
+  }
+
+  .ant-layout-header h5 {
+    display: none;
   }
 }

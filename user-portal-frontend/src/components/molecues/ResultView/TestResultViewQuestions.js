@@ -88,6 +88,7 @@ class TestResultViewQuestions extends React.Component {
             rowKey="_id"
             bordered
             pagination={false}
+            scroll={{ x: true }}
           />
         </div>
       );

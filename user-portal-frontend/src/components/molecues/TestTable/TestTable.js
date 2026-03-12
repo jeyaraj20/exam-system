@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Table, Card, Tag } from "antd";
+import { Table, Card, Tag, Spin } from "antd";
 import { getTestDetailsFromId } from "../../../redux/actions/teacherTestAction";
 
 class TestTable extends React.Component {
@@ -45,12 +45,16 @@ class TestTable extends React.Component {
 
     return (
       <Card style={{ background: "#e7e7e7" }}>
-        <Table
-          columns={columns}
-          dataSource={this.props.testlist}
-          rowKey="_id"
-          pagination={false}
-        />
+        {" "}
+        <Spin spinning={!this.props.testlist}>
+          <Table
+            columns={columns}
+            dataSource={this.props.testlist}
+            rowKey="_id"
+            pagination={false}
+            scroll={{ x: true }}
+          />{" "}
+        </Spin>
       </Card>
     );
   }

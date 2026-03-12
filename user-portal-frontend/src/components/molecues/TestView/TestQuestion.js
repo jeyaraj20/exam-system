@@ -37,33 +37,21 @@ class TestQuestion extends React.Component {
         <Radio.Group
           onChange={this.optionSelectHandler}
           value={selectedValue}
-          style={{ marginTop: 15 }}
+          style={{ display: "flex", flexDirection: "column", marginTop: 15 }}
         >
-          <Radio
-            style={{ display: "block", margin: "8px 0" }}
-            value={que.options[0]}
-          >
+          <Radio style={{ margin: "8px 0" }} value={que.options[0]}>
             {que.options[0]}
           </Radio>
 
-          <Radio
-            style={{ display: "block", margin: "8px 0" }}
-            value={que.options[1]}
-          >
+          <Radio style={{ margin: "8px 0" }} value={que.options[1]}>
             {que.options[1]}
           </Radio>
 
-          <Radio
-            style={{ display: "block", margin: "8px 0" }}
-            value={que.options[2]}
-          >
+          <Radio style={{ margin: "8px 0" }} value={que.options[2]}>
             {que.options[2]}
           </Radio>
 
-          <Radio
-            style={{ display: "block", margin: "8px 0" }}
-            value={que.options[3]}
-          >
+          <Radio style={{ margin: "8px 0" }} value={que.options[3]}>
             {que.options[3]}
           </Radio>
         </Radio.Group>

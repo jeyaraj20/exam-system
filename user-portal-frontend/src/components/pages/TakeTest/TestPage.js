@@ -89,17 +89,22 @@ class TestPage extends React.Component {
         {/* Content */}
         <Content style={{ padding: "30px" }}>
           <div style={{ display: "flex" }}>
+            {/* jai */}
             {/* Question List */}
-            <div style={{ width: "18%", margin: "20px" }}>
-              <QuestionList
-                answers={this.props.taketest.answersheet.answers}
-                callback={this.setCurIndex}
-                obj={this}
-              />
-            </div>
+            {/* {this.props.taketest.answersheet.answers ? (
+              <div style={{ width: "18%", margin: "20px" }}>
+                <QuestionList
+                  answers={this.props.taketest.answersheet.answers}
+                  callback={this.setCurIndex}
+                  obj={this}
+                />
+              </div>
+            ) : (
+              <></>
+            )} */}
 
             {/* Question Area */}
-            <div style={{ width: "75%", marginLeft: "40px" }}>
+            <div style={{ width: "100%" }}>
               <AlertBox />
 
               <TestQuestion
